@@ -5,6 +5,8 @@ import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
@@ -56,25 +58,29 @@ class InstaFollowers:
         account = self.driver.find_element(By.XPATH, '//*[@aria-label="Search Input"]')
         account.send_keys(self.account_name)
         self.driver.implicitly_wait(10)
+        wait = WebDriverWait(self.driver, 15)
+        wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR, '.XTCLo')))
         select_search_menu = self.driver.find_element(By.CSS_SELECTOR, '.XTCLo')
-        time.sleep(3)
+        time.sleep(2)
         select_search_menu.send_keys(Keys.ARROW_DOWN)
-        time.sleep(3)
+        time.sleep(2)
         select_search_menu.send_keys(Keys.ENTER)
 
     def follow(self):
-        time.sleep(3)
+        wait = WebDriverWait(self.driver, 15)
+        wait.until(ec.visibility_of_element_located((By.XPATH,
+                                               '//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a/div')))
         select_followers = self.driver.find_element(By.XPATH,
                                                '//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a/div')
         self.driver.implicitly_wait(10)
         select_followers.click()
-        time.sleep(5)
+        time.sleep(2)
         followers = self.driver.find_elements(By.XPATH, '//*[text()="Follow"]')
         followers.pop(0)
         for f in followers:
             try:
                 f.click()
-                time.sleep(5)
+                time.sleep(2)
                 update_followers = self.driver.find_elements(By.XPATH, '//*[text()="Follow"]')
                 update_followers.pop(0)
                 for n in update_followers:
