@@ -80,11 +80,12 @@ class InstaFollowers:
         for f in followers:
             try:
                 f.click()
-                time.sleep(2)
+                time.sleep(3)
                 update_followers = self.driver.find_elements(By.XPATH, '//*[text()="Follow"]')
                 update_followers.pop(0)
                 for n in update_followers:
                     if n not in followers:
                         followers.append(n)
+                f.send_keys(Keys.ARROW_DOWN)
             except Exception as r:
                 pass
